@@ -8,6 +8,9 @@ use App\Models\Part;
 use App\Models\Car;
 use App\Models\Country;
 use App\Models\CarPart;
+use App\Models\Category;
+use App\Http\Controllers\Api\CategoryController;
+
 use Carbon\Carbon;
 
 class PartController extends Controller
@@ -16,13 +19,13 @@ class PartController extends Controller
     {
         $totalquantity = 0;
         $ids = Car::find($carid)->parts;
-        
+
             foreach ($ids as $id)
                 $totalquantity += $id->quantity;
-        
+
         return $totalquantity;
     }
-    public function AllPart($orderby)
+    public function AllParts($orderby)
     {
         if($orderby == 'newset')
         {
@@ -67,6 +70,10 @@ class PartController extends Controller
             return response()->json($parts);
         }
     }
+    public function ShowPart(request $request , $id){
+        $part=Part::find($id)->get();
+        return response($part);
+    }
     public function AddPart(request $request)
     {
         if(Country::where('name', $request->country)->exists()){
@@ -85,36 +92,35 @@ class PartController extends Controller
                 'name' => $request->name,
                 'image' =>    $last,
                 'description' => $request->description,
-                'country' => $request->country,
                 'quantity' => $request->quantity,
                 'orginalPrice' => $request->orginalPrice,
                 'sellingPrice' => $request->sellingPrice,
                 'category_id' => $request->category_id,
                 'country_id' => $country_id
             ]);
-            $data = $data . CarPart::create([
+            CarPart::create([
                 'car_id' => $request->car_id,
                 'part_id' => $data->id,
             ]);
-            
+
         } else {
             $data = Part::create([
                 'maker' => $request->maker,
                 'name' => $request->name,
                 'description' => $request->description,
-                'country' => $request->country,
                 'quantity' => $request->quantity,
                 'orginalPrice' => $request->orginalPrice,
                 'sellingPrice' => $request->sellingPrice,
                 'category_id' => $request->category_id,
                 'country_id' => $country_id
             ]);
-            
+            $data2= CarPart::create([
+                'car_id' => $request->car_id,
+                'part_id' => $data->id,
+            ]);
         }
-        $data = $data . CarPart::insert([
-            'car_id' => $request->car_id,
-            'part_id' => $data->id,
-        ]);
+
+        Category::find($request->category_id)->update(['partsCount' => CategoryController::partsCount($request->category_id)]);
         Car::find($request->car_id)->update(['partsCount' => PartController::partsCount($request->car_id)]);
         return response()->json($data);
     }
@@ -164,14 +170,5 @@ class PartController extends Controller
             unlink($part->image);
         $part->delete();
     }
-    // public function test($carid){
-    //     $totalquantity = 0;
-    //     $ids = Car::find($carid);
-        
-    //         foreach ($ids->parts as $id)
-    //             dd($id->quantity);
-        
-         
-        
-    // }
+
 }

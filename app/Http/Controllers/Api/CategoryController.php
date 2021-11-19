@@ -23,6 +23,10 @@ class CategoryController extends Controller
         $categories = Category::all();
         return response()->json($categories);
     }
+    public function show(request $request , $id){
+        $category=Category::find($id)->get();
+        return response($category);
+    }
     public function AddCategory(request $request)
     {
         if ($request->image) {

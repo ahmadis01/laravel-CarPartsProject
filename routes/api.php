@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\CarController;
 use App\Http\Controllers\Api\PartController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\BrandController;
 use Illuminate\Http\Request;
 
@@ -25,14 +26,14 @@ Route::group([
 //admin routes
 Route::group(['middleware' => 'admin'], function(){
     Route::get('admin/getUsers', [AdminController::class,'GetUsers']); 
-    Route::post('admin/changeUserRole', [AdminController::class,'ChangeUserRole']); 
+    Route::post('admin/changeUserRole/{id}', [AdminController::class,'ChangeUserRole']); 
 
 });
 
 
 
 //cars routes
-Route::get('car/all', [CarController::class,'AllCar']); 
+Route::get('car/all', [CarController::class,'AllCars']); 
 Route::get('car/getCarDetails/{id}', [CarController::class,'GetCarDetails']);
 Route::get('car/getPartsByCar/{id}', [CarController::class,'GetPartsCar']);
 Route::get('car/getCarList', [CarController::class,'GetCarList']);
@@ -54,12 +55,17 @@ Route::group(['middleware' => 'check.permissions'], function(){
 
 
 //Parts routes
-Route::get('part/all/{orderby}', [PartController::class,'AllPart']); 
+Route::get('part/all/{orderby}', [PartController::class,'AllParts']);
+Route::get('part/getPartDetails/{id}', [PartController::class,'ShowPart']);
 Route::group(['middleware' => 'check.permissions'], function(){
     Route::post('part/add', [PartController::class,'AddPart']);
     Route::put('part/edit/{id}', [PartController::class,'EditPart']);
     Route::delete('part/delete/{id}', [PartController::class,'DeletePart']);
 });
 
+
+//country routes
+Route::get('country/all' ,[CountryController::class,'AllCountries']);
+Route::get('country/show/{id}' ,[CountryController::class,'ShowCountry']);
 
 Route::get('brand/add', [BrandController::class,'add']);

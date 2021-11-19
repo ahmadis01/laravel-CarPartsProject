@@ -16,7 +16,9 @@ class CheckPermissions
      */
     public function handle(Request $request, Closure $next)
     {
-        if(auth()->user()->role_id<=2)
+        if(auth()->user()==null)
+            return response()->json("you are not auth");
+        else if(auth()->user()->role_id<=2)
             return $next($request);
 
         return response()->json('you don\'t have Permissions');

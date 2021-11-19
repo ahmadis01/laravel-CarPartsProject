@@ -13,13 +13,10 @@ use App\Models\Country;
 
 class CarController extends Controller
 {
-    public function AllCar()
+    public function AllCars()
     {
-       
         $cars = Car::all();
         return response()->json($cars);
-        
-
     }
     
     public function AddCar(request $request)
@@ -62,7 +59,7 @@ class CarController extends Controller
     {
         
         $cars_list = Car::select('id', 'name')->get();
-        return $cars_list;
+        return response()->json($cars_list);
     }
     public function GetCarDetails($id)
     {

@@ -16,9 +16,11 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if(auth()->user()->role_id==1)
+        if(auth()->user()==null)
+            return response()->json("you are not auth");
+        else if(auth()->user()->role_id==1)
             return $next($request);
-        
-        return response()->json('You don\'t have Permissions');
+        else
+            return response()->json('You don\'t have Permissions');
     }
 }
