@@ -11,6 +11,7 @@ class BrandController extends Controller
 {
     public function add(){
 
+        
         $jsondata=file_get_contents('brands.json');
         $obj=json_decode($jsondata,true);
         foreach($obj as $item){
