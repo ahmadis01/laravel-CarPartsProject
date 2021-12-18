@@ -82,6 +82,7 @@ class PartController extends Controller
             $insert=Country::create(['name' => $request->country]);
             $country_id = $insert->id;
         }
+        
         if ($request->image) {
             $image = $request->file('image');
             $gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
