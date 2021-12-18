@@ -13,6 +13,7 @@ class CountryController extends Controller
     }
     public function ShowCountry(request $request ,$id){
         $country=Country::find($id)->get();
-        return response();
+        return response()->json($country);
     }
+    
 }

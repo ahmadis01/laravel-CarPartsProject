@@ -27,7 +27,7 @@ class PartController extends Controller
     }
     public function AllParts($orderby)
     {
-        if($orderby == 'newset')
+        if($orderby == 'newest')
         {
             $parts = Part::latest()->get();
             return response()->json($parts);

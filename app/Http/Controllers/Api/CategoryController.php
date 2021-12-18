@@ -18,15 +18,19 @@ class CategoryController extends Controller
             $totalquantity += $part->quantity;
         return $totalquantity;
     }
+
     public function AllCategory()
     {
         $categories = Category::all();
         return response()->json($categories);
     }
-    public function show(request $request , $id){
+
+    public function show(request $request, $id)
+    {
         $category=Category::find($id)->get();
         return response($category);
     }
+
     public function AddCategory(request $request)
     {
         if ($request->image) {
@@ -34,11 +38,9 @@ class CategoryController extends Controller
             $image_name = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
             $last = 'images/categories/' . $image_name;
             $category = Category::create([
-                'name' => $request->name,
-                'image' => $last,
+                'name' => $request->name, 'image' => $last,
                 'partsCount' => 0,
-                'created_at' => Carbon::now(),
-            ]);
+                'created_at' => Carbon::now(),]);
             Category::find($category->id)->update(['partsCount' => CategoryController::partsCount($category->id)]);
         } else {
             $category = Category::create([
@@ -52,8 +54,8 @@ class CategoryController extends Controller
 
         return response()->json($category);
     }
-    public function EditCategory(request $request, $id)
-    {
+
+    public function EditCategory(request $request, $id){
         if ($request->image) {
             $oldimage = Category::find($id)->image;
             if ($oldimage != 'images/category/default.png')
@@ -65,18 +67,16 @@ class CategoryController extends Controller
             $category = Category::find($id)->update([
                 'name' => $request->name,
                 'image' => $last,
-                'part_id' => $request->car_id,
-                
-            ]);
+                'part_id' => $request->car_id,]);
         } else {
             $category = Category::find($id)->update([
                 'name' => $request->name,
-                'part_id' => $request->car_id,
-
+                'part_id' => $request->car_id
             ]);
         }
         return response()->json('succes');
     }
+
     public function DeleteCategory(request $request, $id)
     {
         $category = Category::find($id);
@@ -85,6 +85,7 @@ class CategoryController extends Controller
         $category->delete();
         return response()->json('succes');
     }
+
     public function GetPartsCategory($id)
     {
         $parts = Category::find($id)->parts()->latest()->get();
