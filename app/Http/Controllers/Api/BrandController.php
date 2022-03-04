@@ -15,18 +15,16 @@ class BrandController extends Controller
         $jsondata=file_get_contents('brands.json');
         $obj=json_decode($jsondata,true);
         foreach($obj as $item){
-            if(Country::where('name', $item['country'])->exists()){
-                $country_id=Country::where('name',$item['country'])->first()->id;
-            }else{
-                $insert=Country::create(['name' => $item['country']]);
-                $country_id = $insert->id;
-            }
+            $country_id=Country::firstOrCreate([
+                'name' => $item['country'],
+            ])->id;
         $data=Brand::create([
             'name' => $item['name'],
             'logo' => $item['logo'],
             'country_id' => $country_id
 
         ]);
+        
         }
     }
 }

@@ -62,8 +62,7 @@ class CarController extends Controller
         return response()->json($cars_list);
     }
     public function GetCarDetails($id)
-    {
-        
+    {  
         $car = Car::where('id', $id)->get();
         return response()->json($car);
     }

@@ -26,4 +26,7 @@ class Part extends Model
     public function cars(){
         return $this->belongsToMany(Car::class,'car_parts');
     }
+    public function orders(){
+        return $this->belongsToMany(Order::class,'order_parts');
+    }
 }

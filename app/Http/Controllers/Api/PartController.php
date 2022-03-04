@@ -76,12 +76,9 @@ class PartController extends Controller
     }
     public function AddPart(request $request)
     {
-        if(Country::where('name', $request->country)->exists()){
-            $country_id=Country::where('name',$request->country)->first()->id;
-        }else{
-            $insert=Country::create(['name' => $request->country]);
-            $country_id = $insert->id;
-        }
+        $country_id=Country::firstOrCreate([
+            'name' => $request->country,
+        ])->id;
         
         if ($request->image) {
             $image = $request->file('image');
